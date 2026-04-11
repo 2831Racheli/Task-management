@@ -1,0 +1,119 @@
+/* App.css - גרסת ה-GRID החסינה */
+
+/* 1. איפוס השורש - הכרחי כדי למנוע את החלק הלבן */
+html, body, #root {
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden; /* מונע סרגל גלילה כפול */
+  background-color: #F5F5F5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* 2. המבנה הראשי - שימוש ב-Grid למניעת מחיצה */
+.appLayout { 
+  display: grid;
+  /* עמודה ימנית לסרגל (300px) ועמודה שמאלית לתוכן (כל השאר - 1fr) */
+  grid-template-columns: 300px 1fr; 
+  width: 100vw !important; 
+  height: 100vh; 
+  direction: rtl; 
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* 3. סרגל צד - קבוע במיקום שלו */
+.sidebar { 
+  background-color: #EFEBE9; 
+  padding: 30px 20px; 
+  display: flex; 
+  flex-direction: column; 
+  border-left: 1px solid #D7CCC8;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.sidebarTitle { color: #5D4037; font-size: 1.3rem; margin-bottom: 25px; border-bottom: 2px solid #D7CCC8; padding-bottom: 10px; font-weight: bold; }
+.categoryList { list-style: none; padding: 0; margin: 0; flex: 1; }
+.categoryItem { padding: 12px 15px; cursor: pointer; border-radius: 12px; margin-bottom: 8px; font-size: 1rem; color: #4E342E; transition: 0.3s; }
+
+.sidebarFooter { margin-top: auto; padding-top: 20px; border-top: 1px solid #D7CCC8; }
+.addCategoryWrapper { display: flex; gap: 8px; margin-bottom: 15px; }
+.smallInput { flex: 1; padding: 10px; border-radius: 10px; border: 1px solid #D7CCC8; outline: none; }
+.addBtn { width: 40px; background-color: #8D775F; color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 1.2rem; }
+.logoutBtn { width: 100%; background-color: #D7CCC8; border: none; padding: 12px; border-radius: 10px; cursor: pointer; font-weight: bold; color: #5D4037; }
+
+/* 4. אזור התוכן המרכזי - מתפרס על כל שאר המסך */
+.mainContent { 
+  height: 100vh;
+  overflow-y: auto;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* מצמיד הכל לימין (בגלל ה-RTL) */
+}
+
+/* 5. המיכל הפנימי - מתרחב לכל הרוחב הפנוי */
+.contentWrapper { 
+  width: 100%; 
+  max-width: 1000px; /* ניתן להגדיל אם רוצים משימות רחבות יותר */
+}
+
+.mainHeader { margin-bottom: 30px; text-align: right; }
+.mainTitle { font-size: 3rem; color: #3E2723; margin: 0; font-weight: 800; }
+
+.addTodoForm { margin-bottom: 35px; width: 100%; }
+.mainInput { 
+  width: 100%; 
+  padding: 18px 25px; 
+  border-radius: 18px; 
+  border: 1px solid #E0E0E0; 
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
+  font-size: 1.1rem; 
+  outline: none;
+}
+
+/* 6. כרטיסי המשימות - מתיחה מלאה מצד לצד */
+.todoContainer { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 15px;
+  width: 100%;
+}
+
+.todoCard { 
+  background-color: white; 
+  padding: 20px 25px; 
+  border-radius: 15px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between; 
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  border: 1px solid #F0F0F0;
+  width: 100%; /* חובה כדי שלא יתכווץ */
+}
+
+.todoText { 
+  flex: 1; 
+  font-size: 1.2rem; 
+  color: #424242; 
+  margin: 0 20px;
+  text-align: right;
+  white-space: normal; /* מונע שבירה אנכית */
+  word-break: break-word;
+}
+
+.checkbox { width: 22px; height: 22px; cursor: pointer; accent-color: #8D775F; flex-shrink: 0; }
+.deleteBtn { background: none; border: none; cursor: pointer; font-size: 1.3rem; color: #BDBDBD; padding: 5px; flex-shrink: 0; }
+.emptyMsg { text-align: center; color: #9E9E9E; margin-top: 50px; font-size: 1.1rem; width: 100%; }
+
+/* עיצוב מסך התחברות */
+.authContainer { background-color: #F5F5F5; min-height: 100vh; display: flex; align-items: center; justify-content: center; width: 100vw; }
+.authCard { background-color: #E0D8D0; padding: 45px; width: 90%; max-width: 380px; border-radius: 25px; text-align: center; }
+.authForm { display: flex; flex-direction: column; gap: 18px; }
+.authInput { padding: 14px; border-radius: 14px; border: 1px solid #C4B9AF; font-size: 1rem; outline: none; width: 100%; }
+.authButton { padding: 14px; background-color: #8D775F; color: white; border: none; border-radius: 14px; cursor: pointer; font-weight: bold; font-size: 1rem; }
+.authToggle { margin-top: 22px; cursor: pointer; font-size: 0.95rem; text-decoration: underline; color: #5D4F43; }
