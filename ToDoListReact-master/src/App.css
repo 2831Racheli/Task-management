@@ -19,7 +19,7 @@ html, body, #root {
   display: grid;
   /* עמודה ימנית לסרגל (300px) ועמודה שמאלית לתוכן (כל השאר - 1fr) */
   grid-template-columns: 300px 1fr; 
-  width: 100vw !important; 
+  width: 100% !important; 
   height: 100vh; 
   direction: rtl; 
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
