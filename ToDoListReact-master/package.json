@@ -6,7 +6,8 @@
     "axios": "^1.6.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1"
+    "react-scripts": "5.0.1",
+    "sweetalert2": "^12.4.0"
   },
   "scripts": {
     "start": "react-scripts start",
