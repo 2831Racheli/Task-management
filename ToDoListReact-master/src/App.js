@@ -1,7 +1,6 @@
-// להוסיף מחיקת קטגוריה!!
-
 import React, { useEffect, useState } from 'react';
 import service from './service.js';
+import Swal from 'sweetalert2';
 
 function App() {
   const [newTodo, setNewTodo] = useState("");
@@ -35,12 +34,81 @@ function App() {
         if (authData.isLogin) {
             await service.login(authData.username, authData.password);
             setUser(true);
+            Swal.fire({
+                icon: 'success',
+                title: 'ברוכים הבאים!',
+                timer: 1500,
+                showConfirmButton: false,
+                toast: true,
+                position: 'top-end'
+            });
         } else {
             await service.register(authData.username, authData.password);
-            alert("נרשמת בהצלחה! עכשיו התחבר");
+            Swal.fire({
+                icon: 'success',
+                title: 'נרשמת בהצלחה!',
+                text: 'עכשיו אפשר להתחבר למערכת',
+                confirmButtonText: 'מעולה'
+            });
             setAuthData({ ...authData, isLogin: true });
         }
-    } catch (err) { alert("שגיאה בפרטים"); }
+    } catch (err) { 
+        Swal.fire({ icon: 'error', title: 'שגיאה', text: 'בדקי את שם המשתמש והסיסמה' });
+    }
+  };
+
+  // --- פונקציות CRUD מהירות (עדכון אופטימי) ---
+
+  const handleAddTask = async (e) => {
+    e.preventDefault();
+    if(!newTodo) return;
+    
+    try {
+        const addedTask = await service.addTask(newTodo, selectedCategory);
+        // עדכון מיידי של הרשימה אצל המשתמש
+        setTodos([...todos, addedTask]);
+        setNewTodo("");
+    } catch (e) {
+        Swal.fire({ icon: 'error', text: 'הוספת המשימה נכשלה' });
+    }
+  };
+
+  const handleDeleteTask = async (id) => {
+    const originalTodos = [...todos];
+    // מחיקה מיידית מהמסך
+    setTodos(todos.filter(t => t.id !== id));
+
+    try {
+        await service.deleteTask(id);
+    } catch (e) {
+        // אם נכשל בשרת - מחזירים את המצב לקדמותו
+        setTodos(originalTodos);
+        Swal.fire({ icon: 'error', text: 'המחיקה נכשלה בשרת' });
+    }
+  };
+
+  const handleToggleComplete = async (todo, isComplete) => {
+    const originalTodos = [...todos];
+    // שינוי ה-Checkbox מיד
+    setTodos(todos.map(t => t.id === todo.id ? {...t, isComplete} : t));
+
+    try {
+        await service.setCompleted(todo.id, isComplete, todo.name);
+    } catch (e) {
+        setTodos(originalTodos);
+    }
+  };
+
+  const handleAddCategory = async () => {
+    if(!newCategoryName) return;
+    try {
+        const newCat = await service.addCategory(newCategoryName);
+        setCategories([...categories, newCat]);
+        setNewCategoryName("");
+        Swal.fire({ icon: 'success', title: 'נושא נוסף', timer: 1000, showConfirmButton: false });
+    } catch (e) {
+        Swal.fire({ icon: 'error', text: 'הוספת נושא נכשלה' });
+    }
   };
 
   if (!user) {
@@ -101,12 +169,7 @@ function App() {
                     value={newCategoryName}
                     onChange={e => setNewCategoryName(e.target.value)}
                 />
-                <button style={styles.addBtn} onClick={async () => {
-                    if(!newCategoryName) return;
-                    await service.addCategory(newCategoryName);
-                    setNewCategoryName("");
-                    loadData();
-                }}>+</button>
+                <button style={styles.addBtn} onClick={handleAddCategory}>+</button>
             </div>
             <button onClick={() => { service.logout(); setUser(false); }} style={styles.logoutBtn}>התנתק</button>
         </div>
@@ -121,13 +184,7 @@ function App() {
                 </h1>
             </header>
 
-            <form style={styles.addTodoForm} onSubmit={async (e) => { 
-                e.preventDefault(); 
-                if(!newTodo) return;
-                await service.addTask(newTodo, selectedCategory); 
-                setNewTodo(""); 
-                loadData(); 
-            }}>
+            <form style={styles.addTodoForm} onSubmit={handleAddTask}>
                 <input 
                     style={styles.mainInput} 
                     placeholder={selectedCategory ? "הוסף משימה לנושא זה..." : "בחר נושא להוספה..."} 
@@ -139,7 +196,7 @@ function App() {
             <div style={styles.todoContainer}>
                 {filteredTodos.map(todo => (
                     <div key={todo.id} style={styles.todoCard}>
-                        <button style={styles.deleteBtn} onClick={async () => { await service.deleteTask(todo.id); loadData(); }}>❎</button>
+                        <button style={styles.deleteBtn} onClick={() => handleDeleteTask(todo.id)}>❎</button>
                         
                         <span style={{
                             ...styles.todoText, 
@@ -151,9 +208,9 @@ function App() {
 
                         <input 
                             type="checkbox" 
-                            checked={todo.isComplete} 
+                            checked={todo.isComplete || false} 
                             style={styles.checkbox}
-                            onChange={async (e) => { await service.setCompleted(todo.id, e.target.checked, todo.name); loadData(); }} 
+                            onChange={(e) => handleToggleComplete(todo, e.target.checked)} 
                         />
                     </div>
                 ))}
@@ -169,7 +226,7 @@ const styles = {
   appLayout: { 
     display: 'flex', 
     height: '100vh', 
-    width: '100vw',
+    width: '100%', // שינוי מ-100vw ל-100% פותר את בעיית הגלילה
     fontFamily: 'Segoe UI, Tahoma, Geneva, Verdana, sans-serif', 
     direction: 'rtl', 
     backgroundColor: '#F5F5F5',
@@ -260,8 +317,8 @@ const styles = {
   deleteBtn: { background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.3rem', color: '#BDBDBD' },
   emptyMsg: { textAlign: 'center', color: '#9E9E9E', marginTop: '50px' },
 
-  authContainer: { backgroundColor: '#F5F5F5', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' },
-  authCard: { backgroundColor: '#E0D8D0', padding: '45px', width: '90%', maxWidth: '380px', borderRadius: '25px', textAlign: 'center' },
+  authContainer: { backgroundColor: '#F5F5F5', minHeight: '100vh', display: 'flex', alignItems: 'center', justify(styles.appLayout) { return styles.appLayout; } },
+  authCard: { backgroundColor: '#E0D8D0', padding: '45px', width: '90%', maxWidth: '380px', borderRadius: '25px', textAlgin: 'center' },
   form: { display: 'flex', flexDirection: 'column', gap: '18px' },
   input: { padding: '14px', borderRadius: '14px', border: '1px solid #C4B9AF', outline: 'none' },
   button: { padding: '14px', backgroundColor: '#8D775F', color: 'white', border: 'none', borderRadius: '14px', cursor: 'pointer', fontWeight: 'bold' },
