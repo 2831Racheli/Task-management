@@ -1,133 +1,72 @@
-/* App.css - גרסת ה-GRID החסינה */
-
-/* 1. איפוס מוחלט - הוספתי !important כדי לוודא ששום דבר לא דורס את זה */
-/* 1. איפוס השורש - חסימה מוחלטת */
-html, body {
-  max-width: 100%;
-  overflow-x: hidden; /* מונע גלילה רוחבית ברמת הדף */
-  margin: 0;
-  padding: 0;
+/* איפוס חסין לגלילה */
+html, body, #root {
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden;
+  background-color: #F5F5F5;
 }
 
-#root {
-  width: 100%;
-  margin: 0;
-  padding: 0;
-}
-* {
-  box-sizing: border-box;
-}
-/* 2. המבנה הראשי - שימוש ב-calc כדי להיות מדויקים */
+* { box-sizing: border-box; }
+
+/* מבנה ראשי */
 .appLayout { 
-  display: grid;
-  /* נותן לסרגל 300 פיקסלים ולתוכן את כל השאר פחות ה-300 */
-  grid-template-columns: 300px calc(100% - 300px); 
+  display: flex; 
   width: 100%; 
   height: 100vh; 
   direction: rtl; 
-  margin: 0;
-  padding: 0;
-  overflow: hidden; /* האפליקציה עצמה לא גוללת ימינה שמאלה */
 }
-/* 3. סרגל צד - קבוע במיקום שלו */
+
+/* סרגל צד */
 .sidebar { 
+  width: 300px; 
+  min-width: 300px;
   background-color: #EFEBE9; 
   padding: 30px 20px; 
   display: flex; 
   flex-direction: column; 
   border-left: 1px solid #D7CCC8;
-  height: 100vh;
-  overflow-y: auto;
+  height: 100%;
 }
 
+.sidebarContent { flex: 1; overflow-y: auto; }
 .sidebarTitle { color: #5D4037; font-size: 1.3rem; margin-bottom: 25px; border-bottom: 2px solid #D7CCC8; padding-bottom: 10px; font-weight: bold; }
-.categoryList { list-style: none; padding: 0; margin: 0; flex: 1; }
-.categoryItem { padding: 12px 15px; cursor: pointer; border-radius: 12px; margin-bottom: 8px; font-size: 1rem; color: #4E342E; transition: 0.3s; }
+.categoryList { list-style: none; padding: 0; margin: 0; }
+.categoryItem { padding: 12px 15px; cursor: pointer; border-radius: 12px; margin-bottom: 8px; transition: 0.3s; color: #4E342E; }
 
-.sidebarFooter { margin-top: auto; padding-top: 20px; border-top: 1px solid #D7CCC8; }
-.addCategoryWrapper { display: flex; gap: 8px; margin-bottom: 15px; }
-.smallInput { flex: 1; padding: 10px; border-radius: 10px; border: 1px solid #D7CCC8; outline: none; }
-.addBtn { width: 40px; background-color: #8D775F; color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 1.2rem; }
-.logoutBtn { width: 100%; background-color: #D7CCC8; border: none; padding: 12px; border-radius: 10px; cursor: pointer; font-weight: bold; color: #5D4037; }
-
-/* 3. אזור התוכן המרכזי - הוספת box-sizing */
+/* תוכן מרכזי */
 .mainContent { 
-  height: 100vh;
+  flex: 1; 
+  height: 100%;
   overflow-y: auto;
-  overflow-x: hidden; /* חשוב מאוד! */
-  padding: 50px;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box; /* מבטיח שה-padding לא ירחיב את הדיב */
-}
-/* 4. המיכל הפנימי - לוודא שהוא לא בורח */
-.contentWrapper { 
-  width: 100%; 
-  max-width: 100%; /* לא לתת לו לעבור את רוחב האבא */
-  box-sizing: border-box;
-}
-
-.mainHeader { margin-bottom: 30px; text-align: right; }
-.mainTitle { font-size: 3rem; color: #3E2723; margin: 0; font-weight: 800; }
-
-.addTodoForm { margin-bottom: 35px; width: 100%; }
-.mainInput { 
-  width: 100%; 
-  padding: 18px 25px; 
-  border-radius: 18px; 
-  border: 1px solid #E0E0E0; 
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
-  font-size: 1.1rem; 
-  outline: none;
-}
-
-/* 6. כרטיסי המשימות - מתיחה מלאה מצד לצד */
-.todoContainer { 
   display: flex; 
-  flex-direction: column; 
-  gap: 15px;
-  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
 }
 
+.contentWrapper { width: 100%; max-width: 700px; }
+.mainTitle { font-size: 2.8rem; color: #3E2723; font-weight: 800; margin-bottom: 30px; text-align: center; }
+
+/* משימות */
 .todoCard { 
   background-color: white; 
-  padding: 20px 25px; 
+  padding: 16px 20px; 
   border-radius: 15px; 
   display: flex; 
   align-items: center; 
-  justify-content: space-between; 
+  margin-bottom: 12px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.04);
   border: 1px solid #F0F0F0;
-  width: 100%; /* חובה כדי שלא יתכווץ */
 }
 
-.todoText { 
-  flex: 1; 
-  font-size: 1.2rem; 
-  color: #424242; 
-  margin: 0 20px;
-  text-align: right;
-  white-space: normal; /* מונע שבירה אנכית */
-  word-break: break-word;
-}
+.todoText { flex: 1; text-align: right; margin: 0 15px; font-size: 1.15rem; }
 
-.checkbox { width: 22px; height: 22px; cursor: pointer; accent-color: #8D775F; flex-shrink: 0; }
-.deleteBtn { background: none; border: none; cursor: pointer; font-size: 1.3rem; color: #BDBDBD; padding: 5px; flex-shrink: 0; }
-.emptyMsg { text-align: center; color: #9E9E9E; margin-top: 50px; font-size: 1.1rem; width: 100%; }
-
-/* עיצוב מסך התחברות */
-/* 4. תיקון מסך ההתחברות - כאן הייתה טעות של 100vw */
-.authContainer { 
-  background-color: #F5F5F5; 
-  min-height: 100vh; 
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
-  width: 100% !important; /* שיניתי מ-100vw ל-100% */
-  max-width: 100% !important;
-}
+/* מסכי התחברות */
+.authContainer { width: 100%; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
 .authCard { background-color: #E0D8D0; padding: 45px; width: 90%; max-width: 380px; border-radius: 25px; text-align: center; }
 .authForm { display: flex; flex-direction: column; gap: 18px; }
-.authInput { padding: 14px; border-radius: 14px; border: 1px solid #C4B9AF; font-size: 1rem; outline: none; width: 100%; }
-.authButton { padding: 14px; background-color: #8D775F; color: white; border: none; border-radius: 14px; cursor: pointer; font-weight: bold; font-size: 1rem; }
-.authToggle { margin-top: 22px; cursor: pointer; font-size: 0.95rem; text-decoration: underline; color: #5D4F43; }
+.authInput { padding: 14px; border-radius: 14px; border: 1px solid #C4B9AF; outline: none; }
+.authButton { padding: 14px; background-color: #8D775F; color: white; border: none; border-radius: 14px; cursor: pointer; font-weight: bold; }
+.authToggle { margin-top: 22px; cursor: pointer; text-decoration: underline; color: #5D4F43; }
