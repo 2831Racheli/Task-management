@@ -1,4 +1,3 @@
-/* איפוס חסין לגלילה */
 html, body, #root {
   width: 100% !important;
   height: 100% !important;
@@ -10,24 +9,12 @@ html, body, #root {
 
 * { box-sizing: border-box; }
 
-/* מבנה ראשי */
-.appLayout { 
-  display: flex; 
-  width: 100%; 
-  height: 100vh; 
-  direction: rtl; 
-}
+.appLayout { display: flex; width: 100%; height: 100vh; direction: rtl; }
 
-/* סרגל צד */
 .sidebar { 
-  width: 300px; 
-  min-width: 300px;
-  background-color: #EFEBE9; 
-  padding: 30px 20px; 
-  display: flex; 
-  flex-direction: column; 
-  border-left: 1px solid #D7CCC8;
-  height: 100%;
+  width: 300px; min-width: 300px; background-color: #EFEBE9; 
+  padding: 30px 20px; display: flex; flex-direction: column; 
+  border-left: 1px solid #D7CCC8; height: 100%;
 }
 
 .sidebarContent { flex: 1; overflow-y: auto; }
@@ -35,35 +22,22 @@ html, body, #root {
 .categoryList { list-style: none; padding: 0; margin: 0; }
 .categoryItem { padding: 12px 15px; cursor: pointer; border-radius: 12px; margin-bottom: 8px; transition: 0.3s; color: #4E342E; }
 
-/* תוכן מרכזי */
 .mainContent { 
-  flex: 1; 
-  height: 100%;
-  overflow-y: auto;
-  display: flex; 
-  flex-direction: column;
-  align-items: center;
-  padding: 40px 20px;
+  flex: 1; height: 100%; overflow-y: auto; 
+  display: flex; flex-direction: column; align-items: center; padding: 40px 20px;
 }
 
 .contentWrapper { width: 100%; max-width: 700px; }
 .mainTitle { font-size: 2.8rem; color: #3E2723; font-weight: 800; margin-bottom: 30px; text-align: center; }
 
-/* משימות */
 .todoCard { 
-  background-color: white; 
-  padding: 16px 20px; 
-  border-radius: 15px; 
-  display: flex; 
-  align-items: center; 
-  margin-bottom: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-  border: 1px solid #F0F0F0;
+  background-color: white; padding: 16px 20px; border-radius: 15px; 
+  display: flex; align-items: center; margin-bottom: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04); border: 1px solid #F0F0F0;
 }
 
 .todoText { flex: 1; text-align: right; margin: 0 15px; font-size: 1.15rem; }
 
-/* מסכי התחברות */
 .authContainer { width: 100%; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
 .authCard { background-color: #E0D8D0; padding: 45px; width: 90%; max-width: 380px; border-radius: 25px; text-align: center; }
 .authForm { display: flex; flex-direction: column; gap: 18px; }
