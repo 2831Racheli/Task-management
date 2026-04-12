@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-axios.defaults.baseURL = "http://localhost:5043";
+axios.defaults.baseURL = "https://task-management-zx5e.onrender.com";
 
 // אינטרספטור להוספת ה-Token לכל בקשה שיוצאת
 axios.interceptors.request.use(config => {
