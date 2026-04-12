@@ -47,7 +47,7 @@ function App() {
             Swal.fire({
                 icon: 'success',
                 title: 'נרשמת בהצלחה!',
-                text: 'עכשיו אפשר להתחבר למערכת',
+                text: 'עכשיו אפשר להתחבר',
                 confirmButtonText: 'מעולה'
             });
             setAuthData({ ...authData, isLogin: true });
@@ -57,16 +57,12 @@ function App() {
     }
   };
 
-  // --- פונקציות CRUD מהירות (עדכון אופטימי) ---
-
   const handleAddTask = async (e) => {
     e.preventDefault();
     if(!newTodo) return;
-    
     try {
         const addedTask = await service.addTask(newTodo, selectedCategory);
-        // עדכון מיידי של הרשימה אצל המשתמש
-        setTodos([...todos, addedTask]);
+        setTodos([...todos, addedTask]); // עדכון מיידי
         setNewTodo("");
     } catch (e) {
         Swal.fire({ icon: 'error', text: 'הוספת המשימה נכשלה' });
@@ -75,23 +71,18 @@ function App() {
 
   const handleDeleteTask = async (id) => {
     const originalTodos = [...todos];
-    // מחיקה מיידית מהמסך
-    setTodos(todos.filter(t => t.id !== id));
-
+    setTodos(todos.filter(t => t.id !== id)); // מחיקה מיידית מהמסך
     try {
         await service.deleteTask(id);
     } catch (e) {
-        // אם נכשל בשרת - מחזירים את המצב לקדמותו
         setTodos(originalTodos);
-        Swal.fire({ icon: 'error', text: 'המחיקה נכשלה בשרת' });
+        Swal.fire({ icon: 'error', text: 'המחיקה נכשלה' });
     }
   };
 
   const handleToggleComplete = async (todo, isComplete) => {
     const originalTodos = [...todos];
-    // שינוי ה-Checkbox מיד
-    setTodos(todos.map(t => t.id === todo.id ? {...t, isComplete} : t));
-
+    setTodos(todos.map(t => t.id === todo.id ? {...t, isComplete} : t)); // עדכון מיידי
     try {
         await service.setCompleted(todo.id, isComplete, todo.name);
     } catch (e) {
@@ -105,9 +96,8 @@ function App() {
         const newCat = await service.addCategory(newCategoryName);
         setCategories([...categories, newCat]);
         setNewCategoryName("");
-        Swal.fire({ icon: 'success', title: 'נושא נוסף', timer: 1000, showConfirmButton: false });
     } catch (e) {
-        Swal.fire({ icon: 'error', text: 'הוספת נושא נכשלה' });
+        Swal.fire({ icon: 'error', text: 'נכשל' });
     }
   };
 
@@ -137,8 +127,6 @@ function App() {
 
   return (
     <div style={styles.appLayout}>
-      
-      {/* תפריט צד */}
       <aside style={styles.sidebar}>
         <div style={{ flex: 1, overflowY: 'auto' }}>
             <h2 style={styles.sidebarTitle}>נושאים</h2>
@@ -146,36 +134,25 @@ function App() {
                 <li 
                     style={{...styles.categoryItem, backgroundColor: selectedCategory === null ? '#D6CCC2' : 'transparent'}}
                     onClick={() => setSelectedCategory(null)}
-                >
-                    📂 כל המשימות
-                </li>
+                >📂 כל המשימות</li>
                 {categories.map(cat => (
                     <li 
                     key={cat.id} 
                     style={{...styles.categoryItem, backgroundColor: selectedCategory === cat.id ? '#D6CCC2' : 'transparent'}}
                     onClick={() => setSelectedCategory(cat.id)}
-                    >
-                    🏷️ {cat.name}
-                    </li>
+                    >🏷️ {cat.name}</li>
                 ))}
             </ul>
         </div>
-        
         <div style={styles.sidebarFooter}>
             <div style={styles.addCategoryWrapper}>
-                <input 
-                    style={styles.smallInput} 
-                    placeholder="נושא חדש..." 
-                    value={newCategoryName}
-                    onChange={e => setNewCategoryName(e.target.value)}
-                />
+                <input style={styles.smallInput} placeholder="נושא חדש..." value={newCategoryName} onChange={e => setNewCategoryName(e.target.value)} />
                 <button style={styles.addBtn} onClick={handleAddCategory}>+</button>
             </div>
             <button onClick={() => { service.logout(); setUser(false); }} style={styles.logoutBtn}>התנתק</button>
         </div>
       </aside>
 
-      {/* אזור התוכן המרכזי */}
       <main style={styles.mainContent}>
         <div style={styles.contentWrapper}>
             <header style={styles.mainHeader}>
@@ -183,35 +160,15 @@ function App() {
                     {selectedCategory ? categories.find(c => c.id === selectedCategory)?.name : "כל המשימות"}
                 </h1>
             </header>
-
             <form style={styles.addTodoForm} onSubmit={handleAddTask}>
-                <input 
-                    style={styles.mainInput} 
-                    placeholder={selectedCategory ? "הוסף משימה לנושא זה..." : "בחר נושא להוספה..."} 
-                    value={newTodo} 
-                    onChange={(e) => setNewTodo(e.target.value)} 
-                />
+                <input style={styles.mainInput} placeholder="הוסף משימה..." value={newTodo} onChange={(e) => setNewTodo(e.target.value)} />
             </form>
-
             <div style={styles.todoContainer}>
                 {filteredTodos.map(todo => (
                     <div key={todo.id} style={styles.todoCard}>
                         <button style={styles.deleteBtn} onClick={() => handleDeleteTask(todo.id)}>❎</button>
-                        
-                        <span style={{
-                            ...styles.todoText, 
-                            textDecoration: todo.isComplete ? 'line-through' : 'none', 
-                            opacity: todo.isComplete ? 0.6 : 1
-                        }}>
-                            {todo.name}
-                        </span>
-
-                        <input 
-                            type="checkbox" 
-                            checked={todo.isComplete || false} 
-                            style={styles.checkbox}
-                            onChange={(e) => handleToggleComplete(todo, e.target.checked)} 
-                        />
+                        <span style={{...styles.todoText, textDecoration: todo.isComplete ? 'line-through' : 'none', opacity: todo.isComplete ? 0.6 : 1}}>{todo.name}</span>
+                        <input type="checkbox" checked={todo.isComplete || false} style={styles.checkbox} onChange={(e) => handleToggleComplete(todo, e.target.checked)} />
                     </div>
                 ))}
                 {filteredTodos.length === 0 && <p style={styles.emptyMsg}>אין משימות להצגה</p>}
@@ -223,102 +180,30 @@ function App() {
 }
 
 const styles = {
-  appLayout: { 
-    display: 'flex', 
-    height: '100vh', 
-    width: '100%', // שינוי מ-100vw ל-100% פותר את בעיית הגלילה
-    fontFamily: 'Segoe UI, Tahoma, Geneva, Verdana, sans-serif', 
-    direction: 'rtl', 
-    backgroundColor: '#F5F5F5',
-    margin: 0,
-    padding: 0,
-    overflow: 'hidden'
-  },
-  
-  sidebar: { 
-    width: '300px', 
-    minWidth: '300px',
-    backgroundColor: '#EFEBE9', 
-    padding: '30px 20px', 
-    display: 'flex', 
-    flexDirection: 'column', 
-    borderLeft: '1px solid #D7CCC8',
-    height: '100%',
-    boxSizing: 'border-box'
-  },
-
+  appLayout: { display: 'flex', height: '100vh', width: '100%', fontFamily: 'Segoe UI, Tahoma, Geneva, Verdana, sans-serif', direction: 'rtl', backgroundColor: '#F5F5F5', margin: 0, padding: 0, overflow: 'hidden' },
+  sidebar: { width: '300px', minWidth: '300px', backgroundColor: '#EFEBE9', padding: '30px 20px', display: 'flex', flexDirection: 'column', borderLeft: '1px solid #D7CCC8', height: '100%', boxSizing: 'border-box' },
   sidebarTitle: { color: '#5D4037', fontSize: '1.3rem', marginBottom: '25px', borderBottom: '2px solid #D7CCC8', paddingBottom: '10px', fontWeight: 'bold' },
   categoryList: { listStyle: 'none', padding: 0, margin: 0 },
   categoryItem: { padding: '12px 15px', cursor: 'pointer', borderRadius: '12px', marginBottom: '8px', fontSize: '1rem', color: '#4E342E', transition: '0.3s' },
-  
   sidebarFooter: { marginTop: 'auto', paddingTop: '20px' },
   addCategoryWrapper: { display: 'flex', gap: '8px', marginBottom: '15px' },
   smallInput: { flex: 1, padding: '10px', borderRadius: '10px', border: '1px solid #D7CCC8', outline: 'none' },
   addBtn: { width: '40px', backgroundColor: '#8D775F', color: 'white', border: 'none', borderRadius: '10px', cursor: 'pointer', fontSize: '1.2rem' },
   logoutBtn: { width: '100%', backgroundColor: '#D7CCC8', border: 'none', padding: '12px', borderRadius: '10px', cursor: 'pointer', fontWeight: 'bold', color: '#5D4037' },
-
-  mainContent: { 
-    flex: 1, 
-    height: '100%',
-    overflowY: 'auto',
-    display: 'flex', 
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: '40px 20px'
-  },
-
-  contentWrapper: { 
-    width: '100%', 
-    maxWidth: '700px', 
-    display: 'flex',
-    flexDirection: 'column'
-  },
-
+  mainContent: { flex: 1, height: '100%', overflowY: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '40px 20px' },
+  contentWrapper: { width: '100%', maxWidth: '700px', display: 'flex', flexDirection: 'column' },
   mainHeader: { marginBottom: '30px', textAlign: 'center' },
   mainTitle: { fontSize: '2.8rem', color: '#3E2723', margin: 0, fontWeight: '800', lineHeight: '1.2' },
   addTodoForm: { marginBottom: '30px' },
-  mainInput: { 
-    width: '100%', 
-    padding: '18px 25px', 
-    borderRadius: '18px', 
-    border: '1px solid #E0E0E0', 
-    boxShadow: '0 4px 12px rgba(0,0,0,0.05)', 
-    fontSize: '1.1rem', 
-    outline: 'none',
-    boxSizing: 'border-box'
-  },
-  
-  todoContainer: { 
-    display: 'flex', 
-    flexDirection: 'column', 
-    gap: '12px'
-  },
-
-  todoCard: { 
-    backgroundColor: 'white', 
-    padding: '16px 20px', 
-    borderRadius: '15px', 
-    display: 'flex', 
-    alignItems: 'center', 
-    boxShadow: '0 2px 6px rgba(0,0,0,0.04)',
-    border: '1px solid #F0F0F0'
-  },
-
-  todoText: { 
-    flex: 1, 
-    fontSize: '1.15rem', 
-    color: '#424242', 
-    margin: '0 15px',
-    textAlign: 'right',
-    wordBreak: 'break-word'
-  },
-
+  mainInput: { width: '100%', padding: '18px 25px', borderRadius: '18px', border: '1px solid #E0E0E0', boxShadow: '0 4px 12px rgba(0,0,0,0.05)', fontSize: '1.1rem', outline: 'none', boxSizing: 'border-box' },
+  todoContainer: { display: 'flex', flexDirection: 'column', gap: '12px' },
+  todoCard: { backgroundColor: 'white', padding: '16px 20px', borderRadius: '15px', display: 'flex', alignItems: 'center', boxShadow: '0 2px 6px rgba(0,0,0,0.04)', border: '1px solid #F0F0F0' },
+  todoText: { flex: 1, fontSize: '1.15rem', color: '#424242', margin: '0 15px', textAlign: 'right', wordBreak: 'break-word' },
   checkbox: { width: '22px', height: '22px', cursor: 'pointer', accentColor: '#8D775F' },
   deleteBtn: { background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.3rem', color: '#BDBDBD' },
   emptyMsg: { textAlign: 'center', color: '#9E9E9E', marginTop: '50px' },
-
-  authContainer: { backgroundColor: '#F5F5F5', minHeight: '100vh', display: 'flex', alignItems: 'center', justify(styles.appLayout) { return styles.appLayout; } },
-  authCard: { backgroundColor: '#E0D8D0', padding: '45px', width: '90%', maxWidth: '380px', borderRadius: '25px', textAlgin: 'center' },
+  authContainer: { backgroundColor: '#F5F5F5', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' },
+  authCard: { backgroundColor: '#E0D8D0', padding: '45px', width: '90%', maxWidth: '380px', borderRadius: '25px', textAlign: 'center' },
   form: { display: 'flex', flexDirection: 'column', gap: '18px' },
   input: { padding: '14px', borderRadius: '14px', border: '1px solid #C4B9AF', outline: 'none' },
   button: { padding: '14px', backgroundColor: '#8D775F', color: 'white', border: 'none', borderRadius: '14px', cursor: 'pointer', fontWeight: 'bold' },
