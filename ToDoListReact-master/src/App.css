@@ -1,31 +1,31 @@
 /* App.css - גרסת ה-GRID החסינה */
 
-/* 1. איפוס השורש - הכרחי כדי למנוע את החלק הלבן */
+/* 1. איפוס מוחלט - הוספתי !important כדי לוודא ששום דבר לא דורס את זה */
 html, body, #root {
   width: 100% !important;
+  max-width: 100% !important; /* הגנה נוספת */
   height: 100% !important;
   margin: 0 !important;
   padding: 0 !important;
-  overflow-x: hidden; /* מבטיח שלא תהיה גלילה לצדדים בשום מצב */
+  overflow-x: hidden !important; /* זה ה"סטופר" הסופי לגלילה רוחבית */
   background-color: #F5F5F5;
 }
-
 * {
   box-sizing: border-box;
 }
 
 /* 2. המבנה הראשי - שימוש ב-Grid למניעת מחיצה */
+/* 2. המבנה הראשי - שינוי ל-100% ומניעת גלילה */
 .appLayout { 
   display: grid;
-  /* עמודה ימנית לסרגל (300px) ועמודה שמאלית לתוכן (כל השאר - 1fr) */
   grid-template-columns: 300px 1fr; 
   width: 100% !important; 
+  max-width: 100% !important;
   height: 100vh; 
   direction: rtl; 
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  overflow-x: hidden; /* הגנה כפולה */
+  overflow: hidden; /* האפליקציה עצמה לא גוללת, רק הדיבים הפנימיים */
 }
-
 /* 3. סרגל צד - קבוע במיקום שלו */
 .sidebar { 
   background-color: #EFEBE9; 
@@ -47,14 +47,15 @@ html, body, #root {
 .addBtn { width: 40px; background-color: #8D775F; color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 1.2rem; }
 .logoutBtn { width: 100%; background-color: #D7CCC8; border: none; padding: 12px; border-radius: 10px; cursor: pointer; font-weight: bold; color: #5D4037; }
 
-/* 4. אזור התוכן המרכזי - מתפרס על כל שאר המסך */
+/* 3. אזור התוכן המרכזי - כאן מותרת גלילה רק למעלה-למטה */
 .mainContent { 
   height: 100vh;
-  overflow-y: auto;
+  overflow-y: auto; /* גלילה אנכית בלבד */
+  overflow-x: hidden; /* מניעת גלילה רוחבית בתוך התוכן */
   padding: 50px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* מצמיד הכל לימין (בגלל ה-RTL) */
+  align-items: flex-start;
 }
 
 /* 5. המיכל הפנימי - מתרחב לכל הרוחב הפנוי */
@@ -112,7 +113,16 @@ html, body, #root {
 .emptyMsg { text-align: center; color: #9E9E9E; margin-top: 50px; font-size: 1.1rem; width: 100%; }
 
 /* עיצוב מסך התחברות */
-.authContainer { background-color: #F5F5F5; min-height: 100vh; display: flex; align-items: center; justify-content: center; width: 100vw; }
+/* 4. תיקון מסך ההתחברות - כאן הייתה טעות של 100vw */
+.authContainer { 
+  background-color: #F5F5F5; 
+  min-height: 100vh; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  width: 100% !important; /* שיניתי מ-100vw ל-100% */
+  max-width: 100% !important;
+}
 .authCard { background-color: #E0D8D0; padding: 45px; width: 90%; max-width: 380px; border-radius: 25px; text-align: center; }
 .authForm { display: flex; flex-direction: column; gap: 18px; }
 .authInput { padding: 14px; border-radius: 14px; border: 1px solid #C4B9AF; font-size: 1rem; outline: none; width: 100%; }
