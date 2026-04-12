@@ -1,4 +1,4 @@
-/* איפוס כללי */
+/* 1. איפוס הגדרות - חובה למניעת חלקים לבנים */
 html, body, #root {
   width: 100% !important;
   height: 100% !important;
@@ -10,20 +10,20 @@ html, body, #root {
 
 * { box-sizing: border-box; }
 
-/* מבנה ראשי */
+/* 2. המבנה הראשי - שיחזור מדויק */
 .appLayout { 
   display: flex; 
   height: 100vh; 
   width: 100%; 
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
   direction: rtl; 
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #F5F5F5;
   margin: 0;
   padding: 0;
   overflow: hidden;
 }
 
-/* סרגל צד */
+/* 3. סרגל צד - שיחזור מידות */
 .sidebar { 
   width: 300px; 
   min-width: 300px;
@@ -33,7 +33,6 @@ html, body, #root {
   flex-direction: column; 
   border-left: 1px solid #D7CCC8;
   height: 100%;
-  box-sizing: border-box;
 }
 
 .sidebarTitle { color: #5D4037; font-size: 1.3rem; margin-bottom: 25px; border-bottom: 2px solid #D7CCC8; padding-bottom: 10px; font-weight: bold; }
@@ -46,21 +45,28 @@ html, body, #root {
 .addBtn { width: 40px; background-color: #8D775F; color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 1.2rem; }
 .logoutBtn { width: 100%; background-color: #D7CCC8; border: none; padding: 12px; border-radius: 10px; cursor: pointer; font-weight: bold; color: #5D4037; }
 
-/* תוכן מרכזי */
+/* 4. אזור התוכן - תיקון הפרופורציות */
 .mainContent { 
   flex: 1; 
   height: 100%;
   overflow-y: auto;
   display: flex; 
   flex-direction: column;
-  align-items: center;
+  align-items: center; /* שומר על הכל במרכז */
   padding: 40px 20px;
 }
 
-.contentWrapper { width: 100%; max-width: 700px; display: flex; flexDirection: column; }
+.contentWrapper { 
+  width: 100%; 
+  max-width: 700px; /* זה מה שמונע מהטקסט להיות ענק ומפוזר */
+  display: flex;
+  flex-direction: column;
+}
+
 .mainHeader { margin-bottom: 30px; text-align: center; }
-.mainTitle { font-size: 2.8rem; color: #3E2723; margin: 0; font-weight: 800; lineHeight: 1.2; }
-.addTodoForm { margin-bottom: 30px; width: 100%; }
+.mainTitle { font-size: 2.8rem; color: #3E2723; margin: 0; font-weight: 800; line-height: 1.2; }
+
+.addTodoForm { margin-bottom: 30px; }
 .mainInput { 
   width: 100%; 
   padding: 18px 25px; 
@@ -69,11 +75,10 @@ html, body, #root {
   box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
   font-size: 1.1rem; 
   outline: none;
-  box-sizing: border-box;
 }
 
-/* משימות */
-.todoContainer { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+/* 5. כרטיסי משימות */
+.todoContainer { display: flex; flex-direction: column; gap: 12px; }
 .todoCard { 
   background-color: white; 
   padding: 16px 20px; 
@@ -82,7 +87,6 @@ html, body, #root {
   align-items: center; 
   box-shadow: 0 2px 6px rgba(0,0,0,0.04);
   border: 1px solid #F0F0F0;
-  margin-bottom: 10px;
 }
 
 .todoText { flex: 1; font-size: 1.15rem; color: #424242; margin: 0 15px; text-align: right; word-break: break-word; }
@@ -90,10 +94,10 @@ html, body, #root {
 .deleteBtn { background: none; border: none; cursor: pointer; font-size: 1.3rem; color: #BDBDBD; }
 .emptyMsg { text-align: center; color: #9E9E9E; margin-top: 50px; }
 
-/* מסך אימות */
+/* 6. מסכי התחברות */
 .authContainer { background-color: #F5F5F5; min-height: 100vh; display: flex; align-items: center; justify-content: center; width: 100%; }
 .authCard { background-color: #E0D8D0; padding: 45px; width: 90%; max-width: 380px; border-radius: 25px; text-align: center; }
 .authForm { display: flex; flex-direction: column; gap: 18px; }
 .authInput { padding: 14px; border-radius: 14px; border: 1px solid #C4B9AF; outline: none; width: 100%; }
-.authButton { padding: 14px; background-color: #8D775F; color: white; border: none; border-radius: 14px; cursor: pointer; font-weight: bold; width: 100%; }
+.authButton { padding: 14px; background-color: #8D775F; color: white; border: none; border-radius: 14px; cursor: pointer; font-weight: bold; }
 .authToggle { margin-top: 22px; cursor: pointer; font-size: 0.95rem; text-decoration: underline; color: #5D4F43; }
