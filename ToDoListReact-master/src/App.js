@@ -31,7 +31,8 @@ function App() {
         if (authData.isLogin) {
             await service.login(authData.username, authData.password);
             setUser(true);
-            Swal.fire({ icon: 'success', title: 'ברוכים הבאים!', timer: 1500, showConfirmButton: false, toast: true, position: 'top-end' });
+            Swal.fire({ icon: 'success', title: 'ברוכים הבאים!
+              כאן תוכלו להוסיף קטגוריה ומשימות בתוכה', timer: 1500, showConfirmButton: false, toast: true, position: 'top-end' });
         } else {
             await service.register(authData.username, authData.password);
             Swal.fire({ icon: 'success', title: 'נרשמת בהצלחה!', text: 'עכשיו אפשר להתחבר' });
